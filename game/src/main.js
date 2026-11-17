@@ -589,7 +589,7 @@ window.__moonmelonApi = api;
 
 let last = performance.now();
 let shotFrame = 0;
-const SHOT_FREEZE_FRAME = 150;
+const SHOT_FREEZE_FRAME = 90; // 1.5 simulated seconds, then the scene holds (fixed steps stay deterministic even on slow headless renderers)
 function frame(now) {
   if (state.shotMode) {
     if (shotFrame < SHOT_FREEZE_FRAME) {
