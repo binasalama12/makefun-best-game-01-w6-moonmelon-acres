@@ -19,6 +19,12 @@ export function setupShotScene(state, api) {
   const shot = params.get('shot');
   if (!shot) return false;
   state.shotMode = shot;
+  // Deterministic frames: the DOM HUD bars animate their width with a CSS
+  // transition in live play; a screenshot must catch them settled, so shot
+  // mode snaps them instantly.
+  const snap = document.createElement('style');
+  snap.textContent = '.barwrap span { transition: none !important; }';
+  document.head.appendChild(snap);
 
   if (shot === 'title') {
     api.startRun(1);
