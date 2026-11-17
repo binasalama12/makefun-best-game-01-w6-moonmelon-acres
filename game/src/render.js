@@ -479,7 +479,7 @@ export function drawTitle(ctx, state) {
     '9. Click pests to shoo them (+45). After',
     '    season 7: the Eternal Autumn endless mode.',
   ];
-  how.forEach((line, i) => ctx.fillText(line, 48, 212 + i * 24));
+  how.forEach((line, i) => ctx.fillText(line, 48, 208 + i * 22));
   // Crop bestiary, centre.
   ctx.fillStyle = 'rgba(6,10,26,.88)'; rr(ctx, 428, 148, 424, 420, 14); ctx.fill();
   ctx.strokeStyle = 'rgba(140,190,255,.4)'; rr(ctx, 428, 148, 424, 420, 14); ctx.stroke();
@@ -490,8 +490,8 @@ export function drawTitle(ctx, state) {
     ctx.fillStyle = c.color; ctx.beginPath(); ctx.arc(466, yy - 5, 13, 0, 6.29); ctx.fill();
     ctx.fillStyle = '#eaffd8'; ctx.font = 'bold 15px Georgia';
     ctx.fillText(`${c.name} — seed ${c.seed}c · sell ${c.sell}c · ${c.grow}s`, 488, yy);
-    ctx.font = '12.5px Georgia'; ctx.fillStyle = 'rgba(230,255,215,.75)';
-    ctx.fillText(`${c.blurb} Stages: ${c.stages.join(' → ')}`, 488, yy + 19);
+    ctx.font = '12px Georgia'; ctx.fillStyle = 'rgba(230,255,215,.75)';
+    ctx.fillText(`${c.blurb} ${c.stages.join('→')}`, 488, yy + 19);
   });
   // Pests + bosses, right.
   ctx.fillStyle = 'rgba(6,10,26,.88)'; rr(ctx, 872, 148, 380, 420, 14); ctx.fill();
@@ -577,7 +577,7 @@ export function drawEnd(ctx, state, rank) {
   ctx.fillStyle = state.victory ? '#ffd24d' : '#ff8aa8'; ctx.font = 'bold 38px Georgia';
   ctx.fillText(state.victory ? 'THE ACRES BLOOM — ALL 7 SEASONS' : 'THE FIELD IS STRIPPED', VIEW_W / 2, 118);
   ctx.fillStyle = '#eaffd8'; ctx.font = '15.5px Georgia';
-  if (state.endWhy) wrap(ctx, state.endWhy, 330, 148, 620, 20);
+  if (state.endWhy) wrap(ctx, state.endWhy, VIEW_W / 2, 148, 620, 20);
   // Rank letter.
   ctx.fillStyle = 'rgba(255,210,77,.14)'; ctx.beginPath(); ctx.arc(330, 268, 74, 0, 6.29); ctx.fill();
   ctx.strokeStyle = '#ffd24d'; ctx.lineWidth = 3; ctx.beginPath(); ctx.arc(330, 268, 74, 0, 6.29); ctx.stroke();
