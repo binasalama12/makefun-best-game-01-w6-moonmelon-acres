@@ -159,6 +159,30 @@ function drawCrop(ctx, bed, state) {
     ctx.fillStyle = mut.color; ctx.font = 'bold 12px Georgia'; ctx.textAlign = 'center';
     ctx.fillText(`x${mut.mult}`, fx, fy - R - 14);
   }
+  if (stage === 3) {
+    // Harvest beacon: a soft shaft of moonlight over every ripe crop, with
+    // two sparkles orbiting the fruit — gold for a plain ripe crop, the
+    // mutation's own colour when the lottery landed. "Harvest me now" must
+    // read from across the field, not just in the bed's label text.
+    const beam = mut ? mut.color : '#ffd24d';
+    const pulse = 0.65 + 0.35 * Math.sin(state.time * 3.2 + bed.id * 1.3);
+    const shaft = ctx.createLinearGradient(0, fy - 86, 0, fy + 10);
+    shaft.addColorStop(0, 'rgba(0,0,0,0)');
+    shaft.addColorStop(1, mut ? mut.glow : 'rgba(255,210,77,.34)');
+    ctx.fillStyle = shaft;
+    ctx.beginPath();
+    ctx.moveTo(fx - 7, fy - 86); ctx.lineTo(fx + 7, fy - 86);
+    ctx.lineTo(fx + R + 12 * pulse, fy + 8); ctx.lineTo(fx - R - 12 * pulse, fy + 8);
+    ctx.closePath(); ctx.fill();
+    ctx.fillStyle = beam;
+    for (let k = 0; k < 2; k++) {
+      const a = state.time * 2.4 + bed.id * 2.1 + k * Math.PI;
+      const sx = fx + Math.cos(a) * (R + 13), sy = fy + Math.sin(a) * 9 - 4;
+      ctx.globalAlpha = 0.55 + 0.45 * Math.sin(state.time * 5 + k * 2.4 + bed.id);
+      ctx.beginPath(); ctx.arc(sx, sy, k ? 2.1 : 2.8, 0, 6.29); ctx.fill();
+    }
+    ctx.globalAlpha = 1;
+  }
 }
 
 function drawBeds(ctx, state) {

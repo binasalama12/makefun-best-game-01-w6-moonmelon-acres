@@ -306,6 +306,12 @@ function growBeds(dt) {
     if (bed.growth >= 1 && !bed.mutRolled) {
       bed.mutRolled = true;
       const m = rollMutation(rng, bed, mods);
+      if (!m) {
+        // A plain ripening still gets its moment: a gold burst over the bed
+        // and a feed line, so the harvest window never opens silently.
+        burst(bed.x + bed.w / 2, bed.y + 40, '#ffd24d', 10, 110);
+        pushFeed(`${crop.name} is ripe — harvest it!`, '#ffd24d');
+      }
       if (m) {
         bed.mutation = m;
         const mut = MUTATIONS[m];
