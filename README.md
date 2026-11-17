@@ -20,7 +20,9 @@ Frostbloom ×15, Prismripe ×40**. A mutated harvest is where the money is. Harv
 build a **chain** that multiplies score into the tens of thousands.
 
 - **7 seasons**, each with a coin quota and a clock. **WIN:** meet the quota. **LOSE:** the
-  clock dies first and the Blightstorm strips every standing crop.
+  clock dies first and the Blightstorm strips every standing crop. Meet the quota early
+  and you may **bank the season** (click the WIN block, or press **B**): the season ends
+  at once and every leftover second converts to time-bonus score.
 - **6 crop lines** — Moonmelon, Ember Pepper, Frostberry, Star Turnip, Prism Pumpkin, Void
   Orchid — each with its own seed price, sell price, grow time, four growth stages and its
   own mutation table.
@@ -46,6 +48,7 @@ build a **chain** that multiplies score into the tens of thousands.
   it, a ripe crop to harvest it, a pest to shoo it. In a storm, click a growing bed to
   ward it. Click the moonphase dial to fast-forward, the well to buy water.
 - **1–6:** pick a seed. **F:** cycle moonphase. **W:** water/ward the hovered bed.
+  **B:** bank a met quota early for time-bonus score.
 - **Enter / Space / click:** start, advance, restart. **R:** new run. **P:** pause.
 
 ## Screens

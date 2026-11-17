@@ -13,6 +13,7 @@ import {
   CROPS, MUTATIONS, TALISMANS, SEASONS, DIFFICULTIES, SCORE,
   START_COINS, START_WATER, WATER_MAX, PLANT_WATER, WATER_COST, WARD_COST,
   WELL_COST, CHAIN_WINDOW, MOONPHASES, PHASE_RECT, WELL_RECT,
+  BANK_RECT, BANK_TIME_BONUS,
 } from './config.js';
 import { makeBeds, plantBed, clearBed, isRipe, rollMutation, rollWeather, spawnPest, makeStorm } from './world.js';
 import { drawGame } from './render.js';
@@ -186,6 +187,17 @@ function seasonCleared() {
   setMessage('Season quota met! Draft one talisman to carry into the next season.');
 }
 
+// Bank the season: once the quota is met the player may end the season
+// immediately instead of idling out the clock. Leftover seconds convert
+// to score, then the normal clear flow runs (draft, or the victory end).
+function bankSeason() {
+  if (state.mode !== 'play' || state.quotaEarned < state.quota) return;
+  const bonus = Math.ceil(Math.max(0, state.seasonTime)) * BANK_TIME_BONUS;
+  state.score += bonus;
+  pushFeed(`Season banked early — +${bonus} time bonus`, '#ffd24d');
+  seasonCleared();
+}
+
 function seasonFailed() {
   // The Blightstorm strips the field: every standing crop is lost.
   for (const b of state.beds) if (b.crop !== null) { state.stats.stripped++; clearBed(b); }
@@ -233,8 +245,15 @@ function harvest(bed) {
   const mut = bed.mutation ? MUTATIONS[bed.mutation] : null;
   const mult = mut ? mut.mult : 1;
   const coinsGain = Math.round(crop.sell * mult * mods.sellMult);
+  const quotaWasMet = state.quotaEarned >= state.quota;
   state.coins += coinsGain;
   state.quotaEarned += coinsGain;
+  if (!quotaWasMet && state.quotaEarned >= state.quota && state.mode === 'play') {
+    // The season is won the moment the quota lands — say so, and offer the
+    // bank: end it now and turn the leftover clock into score.
+    setBanner('QUOTA MET — BANK IT (B)!', '#ffd24d');
+    pushFeed('Quota met! Click the WIN block or press B to bank the season.', '#ffd24d');
+  }
   state.stats.coinsEarned += coinsGain;
   state.stats.harvested++;
   if (mut) {
@@ -506,6 +525,8 @@ function handleTap(x, y) {
   }
   if (state.mode !== 'play' || state.paused) return;
 
+  // A met quota turns the top-strip WIN block into the bank button.
+  if (state.quotaEarned >= state.quota && inRect(x, y, BANK_RECT)) { bankSeason(); return; }
   // Pests first: a tap on a pest shoos it.
   for (let i = state.pests.length - 1; i >= 0; i--) {
     const p = state.pests[i];
@@ -553,6 +574,7 @@ attachInput(canvas, {
     }
     if (state.mode !== 'play') return;
     if (code === 'KeyP') { state.paused = !state.paused; return; }
+    if (code === 'KeyB') { bankSeason(); return; }
     if (code === 'KeyR') { startRun(DIFFICULTIES.indexOf(state.diff)); return; }
     if (code === 'KeyF') { state.phaseIdx = (state.phaseIdx + 1) % MOONPHASES.length; return; }
     if (code.startsWith('Digit')) {
@@ -570,7 +592,7 @@ attachInput(canvas, {
 
 // --- Boot & shot scenes -------------------------------------------------------------------
 const api = {
-  startRun, startSeason, endRun,
+  startRun, startSeason, endRun, bankSeason,
   draftCardRect,
   plantShowcase(i, cropIdx, growth, mutation) {
     const bed = state.beds[i];

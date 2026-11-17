@@ -331,10 +331,23 @@ function drawTopStrip(ctx, state) {
   ctx.fillStyle = '#8fe86b';
   const sName = state.endless ? `ETERNAL AUTUMN ${state.seasonN - 6}` : `SEASON ${state.seasonN} · ${state.seasonDef.name.toUpperCase()}`;
   ctx.fillText(sName, FIELD.x, 84);
-  ctx.fillStyle = '#ffd24d';
-  ctx.fillText(`WIN: earn ${state.quota}c (${Math.floor(state.quotaEarned)}/${state.quota})`, FIELD.x + 300, 76);
-  ctx.fillStyle = '#ff8aa8'; ctx.font = 'bold 12.5px Georgia';
-  ctx.fillText('LOSE: quota missed = Blightstorm strips the field', FIELD.x + 300, 94);
+  if (state.quotaEarned >= state.quota && state.mode === 'play') {
+    // Quota met: the WIN block becomes a pulsing bank button — ending the
+    // season now converts the leftover clock into score.
+    const pulse = 0.72 + 0.28 * Math.sin(state.time * 4);
+    ctx.fillStyle = `rgba(255,210,77,${0.3 * pulse + 0.12})`;
+    rr(ctx, FIELD.x + 292, 60, 348, 38, 10); ctx.fill();
+    ctx.strokeStyle = '#ffd24d'; ctx.lineWidth = 2; rr(ctx, FIELD.x + 292, 60, 348, 38, 10); ctx.stroke();
+    ctx.fillStyle = '#ffd24d'; ctx.font = 'bold 14.5px Georgia';
+    ctx.fillText('WIN MET! ▸ BANK SEASON (B)', FIELD.x + 300, 76);
+    ctx.font = 'bold 12px Georgia'; ctx.fillStyle = '#ffe9a8';
+    ctx.fillText(`bank now: +${Math.ceil(Math.max(0, state.seasonTime)) * 15} time-bonus score`, FIELD.x + 300, 93);
+  } else {
+    ctx.fillStyle = '#ffd24d';
+    ctx.fillText(`WIN: earn ${state.quota}c (${Math.floor(state.quotaEarned)}/${state.quota})`, FIELD.x + 300, 76);
+    ctx.fillStyle = '#ff8aa8'; ctx.font = 'bold 12.5px Georgia';
+    ctx.fillText('LOSE: quota missed = Blightstorm strips the field', FIELD.x + 300, 94);
+  }
   ctx.textAlign = 'right';
   ctx.fillStyle = '#ffe9a8'; ctx.font = 'bold 16px Georgia';
   ctx.fillText(`SCORE ${Math.floor(state.score).toLocaleString('en-US')}`, FIELD.x + FIELD.w, 76);

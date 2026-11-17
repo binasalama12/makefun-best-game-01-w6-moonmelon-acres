@@ -32,6 +32,8 @@ export function bedRect(i) {
 export function shopRect(i) {
   return { x: 252 + i * 130, y: SHOP_Y + 8, w: 122, h: 92 };
 }
+export const BANK_RECT = { x: 544, y: 56, w: 348, h: 46 }; // top-strip WIN block; live once the quota is met
+export const BANK_TIME_BONUS = 15; // score per second of season clock banked early
 export const PHASE_RECT = { x: 1060, y: SHOP_Y + 8, w: 168, h: 44 };
 export const WELL_RECT = { x: 1060, y: SHOP_Y + 60, w: 168, h: 40 };
 
