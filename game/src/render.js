@@ -280,12 +280,12 @@ function drawRightPanel(ctx, state) {
   ctx.strokeStyle = 'rgba(140,190,255,.35)'; ctx.lineWidth = 1.5; rr(ctx, x, y, w, 252, 12); ctx.stroke();
   ctx.fillStyle = '#9fd8b4'; ctx.font = 'bold 13px Georgia'; ctx.textAlign = 'left';
   ctx.fillText('INCOMING WEATHER', x + 12, y + 24);
-  const w = state.weather, nw = state.weatherNext;
-  if (w) {
-    ctx.fillStyle = w.color; ctx.font = 'bold 17px Georgia';
-    ctx.fillText(`NOW: ${w.name}`, x + 12, y + 52);
+  const cw = state.weather, nw = state.weatherNext;
+  if (cw) {
+    ctx.fillStyle = cw.color; ctx.font = 'bold 17px Georgia';
+    ctx.fillText(`NOW: ${cw.name}`, x + 12, y + 52);
     ctx.fillStyle = '#eaffd8'; ctx.font = '12px Georgia';
-    wrap(ctx, w.desc, x + 12, y + 72, w - 24, 15);
+    wrap(ctx, cw.desc, x + 12, y + 72, w - 24, 15);
   }
   if (nw) {
     ctx.fillStyle = nw.color; ctx.font = 'bold 14px Georgia';
